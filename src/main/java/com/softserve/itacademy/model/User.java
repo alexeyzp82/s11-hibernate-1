@@ -12,19 +12,6 @@ import java.util.List;
 @Table(name="users")
 public class User  {
 
-    /**
-     * Привіт є питання щодо todo_collaborator (
-     * Це нам треба створити нову сутність, чи табличка сама створиться якщ
-     * о в Use та ToDo entities буде зв'язок @ManyToMany)?
-     * Kostiantyn Kravchenko — Today at 2:16 PM
-     * має сама створитись
-     * Julia Seti — Today at 2:17 PM
-     * через JoinTable
-     * Olena Sotnik — Today at 2:17 PM
-     * тобто join table та inverseJoinColumns
-     * юзер айді передається (мепиться) в туду-колаборатор з
-     * назвою колабораторайді, і в тудус як овнерайді
-     * */
     @Id
     //@GeneratedValue(strategy = GenerationType.IDENTITY)
     @GenericGenerator(
@@ -37,6 +24,7 @@ public class User  {
             }
     )
     // @ManyToMany(mappedBy = "collaborator_id")
+    // TODO: this should be connected to owner_id in todos
     private int id;
 
     @Column(name="first_name")
@@ -46,9 +34,9 @@ public class User  {
     private String firstName;
 
     @Column(name="last_name")
-    //@Pattern(regexp = "(A-Z)(a-z)*[-](A-Z)(a-z)*")
+    @Pattern(regexp = "[A-Z][a-z]*([-][A-Z][a-z]*)?")
     @Size(min=1,max = 255)
-    //@NotBlank (message = "Last name cannot be empty.")
+    @NotBlank (message = "Last name cannot be empty.")
     private String lastName;
 
     @Column(name="email")
