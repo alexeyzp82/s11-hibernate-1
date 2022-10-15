@@ -13,7 +13,6 @@ import java.util.List;
 public class User  {
 
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     @GenericGenerator(
             name = "sequence-generator",
             strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
@@ -23,8 +22,6 @@ public class User  {
                     @org.hibernate.annotations.Parameter(name = "increment_size", value = "1")
             }
     )
-    // @ManyToMany(mappedBy = "collaborator_id")
-    // TODO: this should be connected to owner_id in todos
     private int id;
 
     @Column(name="first_name")
@@ -39,13 +36,12 @@ public class User  {
     @NotBlank (message = "Last name cannot be empty.")
     private String lastName;
 
-    @Column(name="email")
+    @Column(name="email",unique = true)
     @NotBlank
     @Email(message = "Email is not valid.")
     private String email;
 
-    @Column(name="password")
-    //@NotNull(message = "Password should not be empty.")
+    @Column(name="password",nullable = false)
     //@NotBlank @Size(min=1,max = 255)
     private String password;
 
@@ -53,6 +49,13 @@ public class User  {
     @JoinColumn(name = "role_id")
     private Role role;
 
+
+    @ManyToMany (mappedBy = "collaborators")
+    private List<ToDo> toDos;
+
+    //TODO: test correctness
+    @OneToMany(mappedBy = "owner")
+    private List<ToDo> ownToDos;
 
     /**
      * Default public constructor.
@@ -66,11 +69,6 @@ public class User  {
      * */
     public int getId() {
         return id;
-    }
-
-    //TODO : Check if we need setter for generated value
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getFirstName() {
@@ -114,4 +112,21 @@ public class User  {
     public void setRole(Role role) {
        this.role = role;
     }
+
+    public List<ToDo> getToDos() {
+        return toDos;
+    }
+
+    public void setToDos(List<ToDo> toDos) {
+        this.toDos = toDos;
+    }
+
+    public List<ToDo> getOwnToDos() {
+        return ownToDos;
+    }
+
+    public void setOwnToDos(List<ToDo> ownToDos) {
+        this.ownToDos = ownToDos;
+    }
+
 }
