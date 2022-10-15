@@ -114,4 +114,26 @@ public class UserTests {
         );
     }
 
+
+    //State tests
+    private static Stream<Arguments> provideInvalidStateName(){
+        return Stream.of(
+                Arguments.of("stateNameTooLong1234567", "stateNameTooLong1234567"),
+                Arguments.of(" ", " "),
+                Arguments.of("InvalidChars|.*", "InvalidChars|.*")
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideInvalidStateName")
+    void constraintViolationInvalidStateName(String input, String errorValue) {
+        State state = new State();
+        state.setName(input);
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        Set<ConstraintViolation<State>> violations = validator.validate(state);
+        assertEquals(1, violations.size());
+        assertEquals(errorValue, violations.iterator().next().getInvalidValue());
+    }
+
 }
