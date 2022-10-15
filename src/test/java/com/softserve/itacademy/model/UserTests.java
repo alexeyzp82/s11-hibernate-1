@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.params.ParameterizedTest;
 
-@SpringBootTest
+@SpringBootTest(classes = UserTests.class)
 public class UserTests {
 
     private static Role mentorRole;
