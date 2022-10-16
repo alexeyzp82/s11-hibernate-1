@@ -19,7 +19,6 @@ public class ToDo {
 
     @Column(name = "created_at")
     @CreationTimestamp
-    @NotNull
     private LocalDateTime createdAt;
 
     @NotBlank
