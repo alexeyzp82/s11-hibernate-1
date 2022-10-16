@@ -1,9 +1,8 @@
 package com.softserve.itacademy.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -12,10 +11,10 @@ import javax.validation.constraints.Size;
 public class State {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Size(min = 1, max = 20)
-    @NotBlank(message = "Name cannot be empty.")
     @Pattern(regexp = "([A-Za-z0-9-_]+)")
     private String name;
 
