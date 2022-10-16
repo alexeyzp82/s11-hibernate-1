@@ -27,13 +27,11 @@ public class User  {
     @Column(name="first_name")
     @Pattern(regexp = "[A-Z][a-z]*([-][A-Z][a-z]*)?")
     @Size(min=1,max = 255)
-    @NotBlank (message = "Name cannot be empty.")
     private String firstName;
 
     @Column(name="last_name")
     @Pattern(regexp = "[A-Z][a-z]*([-][A-Z][a-z]*)?")
     @Size(min=1,max = 255)
-    @NotBlank (message = "Last name cannot be empty.")
     private String lastName;
 
     @Column(name="email",unique = true)
@@ -42,7 +40,9 @@ public class User  {
     private String email;
 
     @Column(name="password",nullable = false)
-    //@NotBlank @Size(min=1,max = 255)
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$",
+            message = "Password should contains at least one uppercase letter, one lowercase letter,one special" +
+                    "character,at least one digit,minimum eight in length")
     private String password;
 
     @ManyToOne
@@ -53,7 +53,6 @@ public class User  {
     @ManyToMany (mappedBy = "collaborators")
     private List<ToDo> toDos;
 
-    //TODO: test correctness
     @OneToMany(mappedBy = "owner")
     private List<ToDo> ownToDos;
 

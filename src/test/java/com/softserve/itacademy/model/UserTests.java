@@ -114,8 +114,40 @@ public class UserTests {
         );
     }
 
+    /**
+     * Invalid password check.
+     * */
+    private static Stream<Arguments> provideInvalidPassword(){
+        return Stream.of(
+                Arguments.of("lowercase-password", "lowercase-password"),
+                Arguments.of("qwQW1 2!@", "qwQW1 2!@"),
+                Arguments.of("", ""),
+                Arguments.of("qwQW1!@", "qwQW1!@")
+        );
+    }
 
-    //State tests
+    @ParameterizedTest
+    @MethodSource("provideInvalidPassword")
+    void constraintViolationInvalidPassword(String input, String errorValue) {
+        User user = new User();
+        user.setEmail(validUser.getEmail());
+        user.setFirstName("Valid-Name");
+        user.setLastName("Valid-Name");
+        user.setPassword(input);
+        user.setRole(traineeRole);
+
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
+        assertEquals(1, violations.size());
+        assertEquals(errorValue, violations.iterator().next().getInvalidValue());
+    }
+
+
+
+    /**
+     * State entity test.
+     **/
     private static Stream<Arguments> provideInvalidStateName(){
         return Stream.of(
                 Arguments.of("stateNameTooLong1234567", "stateNameTooLong1234567"),
