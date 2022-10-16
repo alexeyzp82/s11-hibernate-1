@@ -28,8 +28,7 @@ public class Task {
     @JoinColumn(name = "todo_id", referencedColumnName = "id")
     private ToDo todo;
 
-//    @ManyToOne(optional = false)
-    @OneToOne(optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "state_id", referencedColumnName = "id")
     private State state;
 
