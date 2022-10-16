@@ -3,32 +3,48 @@ package com.softserve.itacademy.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Objects;
+
 @Entity
 @Table(name = "tasks")
 public class Task {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotBlank
-    @NotNull
+    @Column(name = "name", unique = true)
+    @NotBlank(message = "Name cannot be empty")
     @Size(min = 3, max = 200)
     private String name;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "priority")
+    @NotNull(message = "Priority cannot be null")
     private Priority priority;
 
-    @ManyToOne
-    @JoinColumn(name = "todo_id", nullable = false)
-    private ToDo toDo;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "todo_id", referencedColumnName = "id")
+    private ToDo todo;
 
-    @OneToOne
-    @JoinColumn(name = "state_id", nullable = false)
+//    @ManyToOne(optional = false)
+    @OneToOne(optional = false)
+    @JoinColumn(name = "state_id", referencedColumnName = "id")
     private State state;
 
     public Task() {
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", priority=" + priority +
+                ", todo=" + todo +
+                ", state=" + state +
+                '}';
     }
 
     public long getId() {
@@ -55,12 +71,12 @@ public class Task {
         this.priority = priority;
     }
 
-    public ToDo getToDo() {
-        return toDo;
+    public ToDo getTodo() {
+        return todo;
     }
 
-    public void setToDo(ToDo toDo) {
-        this.toDo = toDo;
+    public void setTodo(ToDo todo) {
+        this.todo = todo;
     }
 
     public State getState() {
@@ -71,3 +87,6 @@ public class Task {
         this.state = state;
     }
 }
+
+
+
