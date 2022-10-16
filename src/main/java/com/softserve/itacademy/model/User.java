@@ -13,15 +13,7 @@ import java.util.List;
 public class User  {
 
     @Id
-    @GenericGenerator(
-            name = "sequence-generator",
-            strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
-            parameters = {
-                    @org.hibernate.annotations.Parameter(name = "sequence_name", value = "user_sequence"),
-                    @org.hibernate.annotations.Parameter(name = "initial_value", value = "10"),
-                    @org.hibernate.annotations.Parameter(name = "increment_size", value = "1")
-            }
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name="first_name")
@@ -45,15 +37,15 @@ public class User  {
                     "character,at least one digit,minimum eight in length")
     private String password;
 
-    @ManyToOne
-    @JoinColumn(name = "role_id")
+    @ManyToOne(optional = false)//(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "role_id",referencedColumnName = "id")
     private Role role;
 
 
     @ManyToMany (mappedBy = "collaborators")
     private List<ToDo> toDos;
 
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner",cascade = CascadeType.ALL)
     private List<ToDo> ownToDos;
 
     /**
